@@ -1,0 +1,27 @@
+[package]
+name = "dendra_cept"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "dendra_cept"
+path = "src/dendra_cept.rs"
+
+[dependencies]
+# For LLM inference (will be used in the next step)
+candle-core = { version = "0.9.1", features = ["accelerate"] } # Use your preferred backend
+candle-nn = { version = "0.9.1" }
+candle-transformers = { version = "0.9.1"}
+hf-hub = "0.3.0" # To download models from Hugging Face
+
+# For handling inputs and data
+reqwest = { version = "0.12", features = ["blocking", "json"] }
+scraper = "0.19.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0" # For simplified error handling
+url = "2.5.0"
+
+# For bundling assets and serving output
+tiny_http = "0.12.0" # A simple, lightweight web server
+

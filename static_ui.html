@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dendra-Cept</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: Inter, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 p-6 flex flex-col items-center">
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">Dendra-Cept</h1>
+        <p class="text-gray-600 mb-6 text-center">Generate knowledge diagrams from text using a local LLM.</p>
+
+        <textarea
+            id="input-text"
+            placeholder="Enter an article URL or raw text here..."
+            class="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 mb-4"
+        ></textarea>
+
+        <button
+            id="process-button"
+            class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+            Process
+        </button>
+
+        <div id="output-container" class="mt-8 border-t border-gray-200 pt-6 hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Generated Diagram</h2>
+            <div id="diagram-output" class="p-4 bg-gray-50 border border-gray-200 rounded-lg overflow-auto">
+                <!-- Mermaid diagram will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const processButton = document.getElementById('process-button');
+        const inputText = document.getElementById('input-text');
+        const outputContainer = document.getElementById('output-container');
+        const diagramOutput = document.getElementById('diagram-output');
+
+        // Placeholder for the JavaScript logic that will communicate with the Rust backend
+        processButton.addEventListener('click', async () => {
+            const content = inputText.value;
+            if (!content) return;
+
+            // This is a placeholder. In the next step, the Rust server will
+            // handle this POST request to process the text.
+            console.log("Processing content...");
+
+            diagramOutput.innerHTML = "Processing...";
+            outputContainer.classList.remove('hidden');
+
+            try {
+                // Simulate a response from the backend
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input: content })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const markdownContent = data.output;
+
+                    // This is where we'd render the markdown and diagrams
+                    diagramOutput.innerHTML = `
+                        <pre class="whitespace-pre-wrap text-sm">${markdownContent}</pre>
+                    `;
+                } else {
+                    diagramOutput.innerHTML = `<p class="text-red-500">Error: Could not process the request.</p>`;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                diagramOutput.innerHTML = `<p class="text-red-500">Error: An internal server error occurred.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
